@@ -16,66 +16,50 @@ typedef long double ld;
     
 using namespace std;
 
-int go_board[19][19];
-pair<int, int> dir[8] = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1},
-                         {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
-bool is_s_win = false;
-pair<int, pii> answer;
-
-int dfs(int d, int in_a_row, int y, int x) {
-    int ny = y + dir[d].first;
-    int nx = x + dir[d].second;
-
-    if(0 <= ny && ny < 19 && 0 <= nx && nx < 19 
-    && go_board[ny][nx] == go_board[y][x]) {
-        return dfs(d, in_a_row + 1, ny, nx);
-    }
-    return in_a_row;
-}
+int train[100001][200];
 
 void Solve() {
-    forn(i, 19)
-        forn(j, 19)
-            cin >> go_board[i][j];
-    for(int i = 0; i < 19; i++) {
-        for(int j = 0; j < 19; j++) {
-            if(go_board[i][j] != 0) {
-                for(int d = 0; d < 4; d++) {
-                    int ni = i + dir[d].first;
-                    int nj = j + dir[d].second;
-                    if(go_board[ni][nj] == go_board[i][j]) {
-                        int in_a_row = dfs(d, 2, ni, nj);
-                        int bi = i + dir[(d + 4) % 8].first;
-                        int bj = j + dir[(d + 4) % 8].second;
-                        
-                        if(go_board[bi][bj] == go_board[i][j])
-                            in_a_row += dfs((d + 4) % 8, in_a_row + 1, bi, bj);
-                        if(in_a_row == 5) {
-                                int ai = i;
-                                int aj = j;
-                                if(d != 0) {
-                                    while(go_board[ai + dir[d].first][aj + dir[d].second] 
-                                    == go_board[ai][aj]) {
-                                        ai -= dir[d].first;
-                                        aj -= dir[d].second;
-                                    }
-                                } else { 
-                                    while(go_board[ai - dir[d].first][aj - dir[d].second] 
-                                    == go_board[ai][aj]) {
-                                        ai -= dir[d].first;
-                                        aj -= dir[d].second;
-                                    }
-                                }
-                            ai++, aj++;
-                            cout << go_board[i][j] << endl << ai << " " << aj << endl;
-                            return;
+    set<int[200]> st;
+    vector<int> used_idx;
+    cout << st.
+    int n, m;
+    cin >> n >> m;
+    for(int i = 0; i < m; i++) {
+        int inst, tr, se;
+        cin >> inst >> tr >> se;
+        used_idx.push_back(tr);
+        
+        switch(inst) {
+            case 1:
+                if(train[tr][se] == 0)
+                    train[tr][se] = 1;
+                break;
+            case 2:
+                if(train[tr][se] == 1)
+                    train[tr][se] = 0;
+                break;
+            case 3:
+                for(int i = 19; i >= 0; i--) {
+                    if(i != 0) {
+                        if(train[tr][i - 1] == 1) {
+                            train[tr][i] = 1;
+                            train[tr][i - 1] = 0;
                         }
                     }
                 }
-            }
+                break;
+            case 4:
+                for(int i = 0; i < 20; i++) {
+                    if(i != 19) {
+                        if(train[tr][i + 1] == 1) {
+                            train[tr][i] = 1;
+                            train[tr][i + 1] = 0;
+                        }
+                    }
+                }
+                break;
         }
     }
-    cout << "0" << endl;
 }
 
 int main()
